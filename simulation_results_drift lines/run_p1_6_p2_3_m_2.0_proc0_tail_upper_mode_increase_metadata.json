@@ -1,0 +1,28 @@
+{
+    "p1": 6,
+    "p2": 3,
+    "m": 2.0,
+    "mode": "increase",
+    "tail_direction": "upper",
+    "simulation_process": 0,
+    "eval_frequency": "monthly",
+    "days_per_month": 21,
+    "x_min": 0.995,
+    "x_max": 3.205,
+    "n_sims": 300000,
+    "n_eval_months": 12,
+    "volatility_list": [
+        5.0,
+        10.0,
+        17.86,
+        25.0
+    ],
+    "warm_up_max": false,
+    "phi_daily": 0.0,
+    "alpha": 0.085604,
+    "beta": 0.901141,
+    "linewidth": 2.5,
+    "markersize": 13.0,
+    "legend_loc": "upper left",
+    "timestamp": "2026-09-02 16:50:24"
+}

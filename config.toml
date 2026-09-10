@@ -1,0 +1,380 @@
+# ==============================================================================
+# ETS PROJECT MASTER CONFIGURATION
+# ==============================================================================
+[data]
+# Paths to your raw historical EUA CSV files:
+raw_2010_2018 = "data_input/icap-uea-price-daily-2010-2018.csv"
+raw_2019_2026 = "data_input/icap-uea-price-daily-2019-2026.csv"
+start_year = 2010
+
+
+[stochastic]
+alpha = 0.085604
+beta = 0.901141
+phi_daily = 0.0
+days_per_month = 21
+empirical_monthly_2010_x = 1.02360
+empirical_monthly_2020_x = 1.03505
+
+[simulation]
+# --- Core Switches ---
+# --- Metric Focus ---
+# "trigger"         -> Main plot = % Triggered, Top plot = P(Trigger) / P(Exceed)
+# "trigger_failure" -> Main plot = % Trigger Failure, Top plot = P(Failure) / P(Exceed) [Miss Rate]
+focus_metric = "trigger_failure"
+show_drift_parity = false      # true = draws vertical line at X = 1.0 if inside [x_min, x_max]
+include_increase = true       # Tests Ratio > m
+include_reduction = false     # Tests Ratio < 1/m
+tail_direction = "lower"      # "upper" -> Trigger Miss; "lower" -> False Trigger
+show_realized_tail = false     # true = shows dashed line for % Realized in/out of trend
+distinguish_true_from_false_positives = false  # true = plots Solid (TP), Dashed (FP), Dotted (FN)
+show_trigger_failure = true   # true = plots % Trigger Failure (Realized in trend but did not fire)
+relative_metric = true        # true = displays stacked relative metric subplot (R) on top
+show_parity = false            # true = displays parity line (R = 1.0) on relative metric subplot
+show_count = false            # false = skips count plots; true = plots conditional/unconditional counts
+warm_up_max = false           # First p1+p2-1 observations on max growth path
+simulation_process = 1        # 0 = AR(1)-GARCH(1,1), 1 = Lognormal (GBM)
+eval_frequency = "monthly"    # "monthly" or "daily"
+
+# --- Simulation Sizing ---
+max_workers = 6
+n_sims =10000 # 1000000
+batch_size =10000 # 500000
+n_eval_months = 12
+oversample_cutoff_pct = 25
+num_x_points = 25
+num_bins = 100
+volatility_list = [0, 5.0, 10.0, 17.86, 25.0]
+use_cache = true
+cache_dir = ".cache_daily_binned_v1"
+metrics_to_plot = ["probability", "unconditional_count", "conditional_count"]
+
+default_x_upper_min = 0.995
+default_x_upper_max = 3.205
+
+default_x_lower_min = 0.800
+default_x_lower_max = 1.210
+
+
+# ==============================================================================
+# PLOTTING AESTHETICS & LABELS
+# ==============================================================================
+
+# ==============================================================================
+# REALIZED TAIL REFERENCE CURVE (% Realized >= Target or < Target)
+# ==============================================================================
+[plotting]
+markersize = 13                                            # Global fallback default
+[plotting.toggles]
+save_fig = true
+without_legend = false
+only_legend = false
+only_tail_reference = false                                # Toggles tail-only distribution view
+show_parity = false                                        # Toggles parity line (R = 1.0) in relative subplot
+show_drift_parity = true                                  # Toggles vertical parity line (X = 1.0) on both panels
+# Historical plot layout toggles:
+split = true             # Separate subplots for price and MA ratio
+historic_down = false    # If true, places price on bottom
+also_daily = true        # Overlays light daily price under monthly avg
+include_ln = false       # If true, adds a 3rd subplot with ln(Price)
+price_lowest = false
+
+[plotting.tail_reference_line]
+show = false                  # true = shows the dashed reference curve on the main panel
+only = false                 # <--- Set to true to show ONLY the % Realized >= Drift (or < Drift) curves!
+linestyle = "--"             # "-", "--", ":", "-."
+linewidth = 2.5              # Line thickness (e.g., 1.5, 2.0, 2.5)
+alpha = 1                 # Opacity / transparency (0.0 to 1.0)
+# Optional: Set a fixed color like "gray" or "black" to override, or leave commented out to match the volatility color
+# color = "black"
+
+[plotting.drift_parity_line]
+show = false              # Set to false to hide
+only = false                   # true = shows ONLY the vertical line (hides data curves)
+x = 1.0                  # X-axis position
+color = "black"          # e.g., "red", "blue", "gray", "#333333"
+linestyle = ":"          # Line style: "-" (solid), "--" (dashed), ":" (dotted), "-." (dash-dot)
+linewidth = 4.5          # Line width / thickness (e.g. 1.0, 1.8, 2.5)
+alpha = 1             # Opacity / transparency (0.0 = invisible, 1.0 = solid)
+
+
+[plotting.colors]
+plot_colors = ["#000000", "#2ca02c", "#1f77b4", "#ff7f0e", "#d62728", "#7b2cbf"]
+plot_markers = ["", "o", "s", "^", "*", "v"]
+
+[plotting.fonts]
+axis_label_size = 26             # Main X and Y axis label size
+tick_label_size = 18             # Main axis tick label size
+relative_axis_label_size = 26    # Top relative ratio Y-axis label size
+relative_tick_label_size = 18    # Top relative ratio tick label size
+title_size = 14                  # Figure title font size
+title_pad = 16                   # Figure title top padding
+legend_title_size = 20           # Legend header / title size
+legend_font_size = 18           # Legend item text size
+parity_label_size = 14           # "Parity (R = 1.0)" annotation text size
+
+[plotting.labels]
+
+# --- Main Y-Axis Labels ---
+y_axis_probability = "% Triggering ({base_mode_str})"
+y_axis_trigger_failure = "% Trigger Failure ({base_mode_str})"
+y_axis_signal_breakdown = "% of Total Series ({base_mode_str})"
+y_axis_unconditional_count = "Uncond. Avg Triggers ({base_mode_str})"
+y_axis_conditional_count = "Cond. Avg Triggers ({base_mode_str})"
+
+# --- Specific Panel Failure Labels ---
+y_axis_false_trigger = "$\\rho$ ({base_mode_str})"
+y_axis_trigger_miss = "$\\pi$ ({base_mode_str})"
+
+# --- Legend Titles & Section Headers ---
+legend_vol_title = "Monthly Volatility ($\\sigma_m$)"
+legend_header_metrics = "Metric Series"
+legend_header_signals = "Signal Breakdown"
+
+# --- Legend Entry Labels ---
+label_vol_entry = "\\sigma_m = {v:.1f}"
+label_triggered = "% Triggered"
+label_tail_prob = "% $X_{\\mathrm{realized}} {tail_sym} X_{\\mathrm{target}}$"
+label_trigger_miss = "% Trigger Miss"
+label_false_trigger = "% False Trigger"
+label_tail_prob_upper = "% $X_{\\mathrm{realized}} \\geq X_{\\mathrm{target}}$"
+label_tail_prob_lower = "% $X_{\\mathrm{realized}} < X_{\\mathrm{target}}$"
+label_tp = "True Pos. (Trigger & $X \\geq X_{\\mathrm{target}}$)"
+label_fp = "Trigger Miss (Trigger & $X < X_{\\mathrm{target}}$)"
+label_fn = "Trigger Miss (No Trigger & $X \\geq X_{\\mathrm{target}}$)"
+
+# --- Plot Titles ---
+title_probability = "Triggering %"
+title_count = "Average Triggering Count"
+title_template = "MA Ratio Mechanism {title} [{base_mode_str}] ({eval_freq} EVAL | {proc_str} | THEORY {tail_dir})\n(Parameters: m={m}, p1={p1}, p2={p2})"
+title_trigger_miss = "% Trigger Miss"
+title_false_trigger = "% False Trigger"
+title_tail_only = "" # ""Baseline Realized vs. Target Drift Distribution"
+
+# --- Top Relative Subplot Labels ---
+y_axis_miss_ratio = "$\\eta$ ({base_mode_str})"
+y_axis_false_trigger_ratio = "$\\kappa$ ({base_mode_str})"
+y_axis_relative_ratio = "Relative Ratio (R)"
+parity_text = "Parity (R = 1.0)"
+
+# --- X-Axis Label ---
+x_axis_theory = "Annual Growth Parameter"
+y_axis_tail_upper = "% Realized Growth $\\geq$ Growth Param."
+y_axis_tail_lower = "% Realized Growth $\\leq$ Growth Param."
+
+# ==============================================================================
+# PLOTTING GRID CONFIGURATION
+# ==============================================================================
+[plotting.grid]
+show_major_grid = true
+major_grid_linestyle = "--"
+major_grid_alpha = 1
+major_grid_width = 1.5
+major_grid_color = "black"
+
+show_minor_grid = true
+minor_subdivisions = 2         # 2 = 1 minor tick between major ticks
+minor_grid_linestyle = ":"
+minor_grid_alpha = 1
+minor_grid_width=1
+minor_grid_color = "black"
+
+# ==============================================================================
+# RUN DEFINITIONS (Shared p1, p2, m with Tail/Mode Settings)
+# ==============================================================================
+
+default_x_lower_min = 0.8
+default_x_lower_max = 1.21
+
+default_x_upper_min = 0.995
+default_x_upper_max = 3.205
+
+# --- Regime 1: ETS1 Current (m=2.4, p1=24, p2=6) ---
+[[runs]]
+p1 = 24
+p2 = 6
+m = 2.4
+linewidth = 3.5
+
+[runs.upper.increase]
+legend_loc = "upper left"
+x_nbins = 15
+
+[runs.upper.reduction]
+x_min = 0.39
+x_max = 1.50
+legend_loc = "upper right"
+x_nbins = 14
+
+[runs.lower.increase]
+legend_loc = "lower right"
+x_nbins = 15
+
+[runs.lower.reduction]
+x_min = 0.39
+x_max = 1.50
+legend_loc = "upper right"
+x_nbins = 14
+
+
+# --- Regime 2: ETS2 Standard (m=1.5, p1=6, p2=3) ---
+[[runs]]
+p1 = 6
+p2 = 3
+m = 1.5
+
+[runs.upper.increase]
+legend_loc = "upper left"
+x_nbins = 15
+
+[runs.upper.reduction]
+x_min = 0.20
+x_max = 1.40
+legend_loc = "upper right"
+x_nbins = 14
+
+[runs.lower.increase]
+legend_loc = "upper left"
+x_nbins = 15
+
+[runs.lower.reduction]
+x_min = 0.20
+x_max = 1.40
+legend_loc = "upper right"
+x_nbins = 14
+
+
+# --- Regime 3: ETS2 Future (m=2.0, p1=6, p2=3) ---
+[[runs]]
+p1 = 6
+p2 = 3
+m = 2.0
+
+[runs.upper.increase]
+legend_loc = "upper left"
+x_nbins = 15
+
+[runs.upper.reduction]
+x_min = 0.20
+x_max = 1.40
+legend_loc = "upper right"
+x_nbins = 14
+
+[runs.lower.increase]
+legend_loc = "upper left"
+x_nbins = 15
+
+[runs.lower.reduction]
+x_min = 0.20
+x_max = 1.40
+legend_loc = "upper right"
+x_nbins = 14
+
+
+# --- Regime 4: ETS1 Old (m=3.0, p1=6, p2=3) ---
+[[runs]]
+p1 = 6
+p2 = 3
+m = 3.0
+
+[runs.upper.increase]
+legend_loc = "upper left"
+x_nbins = 15
+
+[runs.lower.increase]
+legend_loc = "upper left"
+x_nbins = 15
+
+
+[paths]
+output_data_dir = "data_output"
+output_figures = "data_output/figures/"
+log_dir = "data_log"
+
+
+# ==============================================================================
+# HISTORICAL PLOT CONFIGURATION (03_Historical Plot of Prices and MA Ratios.py)
+# ==============================================================================
+
+# Moving Average Ratio pairs to calculate and plot (p1 = preceding base, p2 = recent window)
+[[plotting.ma_ratios]]
+p1 = 24
+p2 = 6
+label = "ETS1: MA(6) / MA(24)"
+color = "#1f77b4"
+linestyle = "-"
+linewidth = 2.0
+
+[[plotting.ma_ratios]]
+p1 = 6
+p2 = 3
+label = "ETS2 / Old ETS1: MA(3) / MA(6)"
+color = "#2ca02c"
+linestyle = "-"
+linewidth = 2.0
+
+# Regulatory trigger thresholds (m)
+[[plotting.thresholds]]
+label = "ETS1 Trigger (m = 2.4)"
+y = 2.4
+color = "#d62728"
+linestyle = "--"
+linewidth = 1.5
+
+[[plotting.thresholds]]
+label = "ETS2 Future Trigger (m = 2.0)"
+y = 2.0
+color = "#7b2cbf"
+linestyle = "--"
+linewidth = 1.5
+
+[[plotting.thresholds]]
+label = "ETS2 Standard Trigger (m = 1.5)"
+y = 1.5
+color = "#ff7f0e"
+linestyle = "--"
+linewidth = 1.5
+
+[[plotting.thresholds]]
+label = "Old ETS1 Trigger (m = 3.0)"
+y = 3.0
+color = "#8c564b"
+linestyle = ":"
+linewidth = 1.5
+
+# Parity line settings (y = 1.0)
+[plotting.parity_line]
+show = true
+y = 1.0
+color = "black"
+linestyle = "-"
+linewidth = 1.2
+alpha = 0.7
+show_labels = true
+x_pos = 0.015
+font_size = 10
+font_weight = "bold"
+label_color = "black"
+label_alpha = 0.85
+bbox_show = true
+bbox_pad = 0.2
+bbox_color = "white"
+bbox_alpha = 0.50
+y_offset_upper = 0.04
+label_upper = "▲ Increase"
+y_offset_lower = 0.04
+label_lower = "▼ Reduction"
+
+# Historical price line aesthetic options
+[plotting.historical_price]
+color = "red"
+linestyle = "-"
+linewidth = 2.2
+label = "EUA Monthly Avg Price"
+
+[plotting.daily_price]
+color = "lightcoral"
+linestyle = "-"
+linewidth = 0.8
+alpha = 0.40
+label = "EUA Daily Price"

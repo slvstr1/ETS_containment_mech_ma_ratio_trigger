@@ -1,0 +1,36 @@
+
+#################################################################
+# DAILY ESTIMATION RUN TIMESTAMP: 2026-09-10 16:20:08
+#################################################################
+[DAILY DATASET SUMMARY - Model: Lognormal Constant Volatility (GBM)]
+  - Start Year Filter   : 2010
+  - Daily observations  : 3941
+  - Date range          : 2010-01-05 to 2026-06-30
+  - Sample Daily Return : 0.000462
+  - Sample Daily Vol    : 3.15%
+
+=========================================================
+  MODEL SELECTION CRITERIA (Benz & Trück 2009 / Burnham & Anderson)
+=========================================================
+  Log-Likelihood (LLF)  = 8037.88  (Higher is better)
+  Akaike Info (AIC)     = -16071.76  (Lower is better)
+  Schwarz Bayesian (BIC)= -16059.20  (Lower is better - Primary Metric)
+  Estimated Parameters  = 2
+
+=========================================================
+  ESTIMATED DAILY PARAMETERS (Lognormal Constant Volatility (GBM))
+=========================================================
+  mu (Daily Drift)          = 0.000462
+  sigma (Daily Volatility)  = 0.031477 (3.1477%)
+  sigma^2 (Daily Variance)  = 0.0009908136
+
+=========================================================
+  IMPLIED MONTHLY & ANNUAL BENCHMARKS (For Simulation)
+=========================================================
+  Implied Monthly Intercept (c) = 0.009693
+  Derived Monthly Growth (G_m)  = 1.00974
+  Implied Yearly Growth Factor  = 1.123x (+12.3%/yr)
+  Implied Monthly Volatility    = 14.42%
+  Implied Annual Volatility     = 49.97%
+=========================================================
+

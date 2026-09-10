@@ -1,0 +1,16 @@
+[project]
+name = "permitprice-mars"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "arch>=8.0.0",
+    "fastparquet>=2026.5.0",
+    "h5py>=3.16.0",
+    "icecream>=2.2.0",
+    "joblib>=1.5.3",
+    "matplotlib>=3.11.1",
+    "pandas>=3.0.5",
+    "pandas-stubs~=3.0.5",
+    "pyarrow>=25.0.0",
+    "scipy-stubs~=1.18.0",
+]

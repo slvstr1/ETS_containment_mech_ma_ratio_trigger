@@ -1,0 +1,3 @@
+[2026-09-10 16:20:20] [CHART SAVED] Saved plot to: data_output/figures/incr_curves_daily_sim_m2.4_p124_p26_months_12_sampl_0.8_1.21_monthly_lognorm_theory_lower_trigger_failure_lower_with_relative.svg & .png
+[2026-09-10 16:20:21] [CHART SAVED] Saved plot to: data_output/figures/incr_curves_daily_sim_m1.5_p16_p23_months_12_sampl_0.8_1.21_monthly_lognorm_theory_lower_trigger_failure_lower_with_relative.svg & .png
+[2026-09-10 16:20:23] [CHART SAVED] Saved plot to: data_output/figures/incr_curves_daily_sim_m2.0_p16_p23_months_12_sampl_0.8_1.21_monthly_lognorm_theory_lower_trigger_failure_lower_with_relative.svg & .png
